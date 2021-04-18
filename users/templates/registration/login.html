@@ -1,0 +1,29 @@
+{% extends 'users/base_template.html' %} {% load static %} {% load humanize %}
+{% block content %}
+
+<div class="col-md-8 bg-light mx-auto p-5 my-4 rounded-lg">
+    <h2 class="text-info text-center">Login</h2>
+    <p class="text-info lead mb-5">
+        Enter valid credentials to Log into the site
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        {% for form in form %}
+            <p class="text-danger">{{ form.errors }}</p>
+            <p>{{ form.label_tag }} {{ form }}</p>
+        {% endfor %}
+        <button class="btn btn-info" type="submit">Login</button>
+    </form>
+    
+    <nav class="navbar navbar-expand-sm bg-light justify-content-center">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                Don't have an account?
+                <a class="nav-link" href="{% url 'user:signup_page' %}">Signup</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+{% endblock %}

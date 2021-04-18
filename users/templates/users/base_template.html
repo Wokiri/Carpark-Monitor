@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{% static 'users/css/bootstrapStyling.css' %}"/>
+    {% block title %}
+      {% if page_name %}
+          <title>{{ page_name }} | Carpark Monitor</title>
+      {% else %}
+          <title>Carpark Monitor</title>
+      {% endif %}
+    {% endblock %}
+
+    {% block doc_media %}
+    {% endblock %}
+  </head>
+  <body>
+    <div class="container-fluid">{% block content %}{% endblock %}</div>
+
+    <script src="{% static 'users/js/bootstrapStyling.js' %}"></script>
+  </body>
+
+</html>

@@ -1,0 +1,149 @@
+{
+  "type": "FeatureCollection",
+  "crs": { "type": "name", "properties": { "name": "EPSG:4326" } },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "segment_display_name": "normal2B_scan | 015 | Geometric Segment",
+        "disease_status": "normal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.11378959703942, -0.310447259995529]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "segment_display_name": "disease3_scan | 016 | Geometric Segment",
+        "disease_status": "DKD"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.152974109732713, -0.19798829459535]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "segment_display_name": "normal3_scan | 025 | Geometric Segment",
+        "disease_status": "normal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.211768845078336, -0.293442387863444]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "segment_display_name": "normal3_scan | 029 | Geometric Segment",
+        "disease_status": "normal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.108525469474479, -0.354913115874874]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "segment_display_name": "normal3_scan | 030 | Geometric Segment",
+        "disease_status": "normal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.067939584937959, -0.379553397798643]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "segment_display_name": "normal3_scan | 031 | Geometric Segment",
+        "disease_status": "normal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.041142840012674, -0.352119408519462]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "segment_display_name": "normal3_scan | 032 | Geometric Segment",
+        "disease_status": "normal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.045787130031572, -0.335267317048827]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "segment_display_name": "normal3_scan | 033 | Geometric Segment",
+        "disease_status": "normal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.084315872567458, -0.324074493907823]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "segment_display_name": "normal3_scan | 034 | Geometric Segment",
+        "disease_status": "normal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.048455126425407, -0.360527476972685]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "segment_display_name": "normal3_scan | 035 | Geometric Segment",
+        "disease_status": "normal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.083210944767991, -0.286848838225237]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "segment_display_name": "normal3_scan | 036 | Geometric Segment",
+        "disease_status": "normal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.059252876140524, -0.294062217263118]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "segment_display_name": "normal3_scan | 037 | Geometric Segment",
+        "disease_status": "normal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.085618429729432, -0.255300358935086]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "segment_display_name": "normal3_scan | 038 | Geometric Segment",
+        "disease_status": "normal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.032725625800474, -0.226491642707703]
+      }
+    }
+  ]
+}
