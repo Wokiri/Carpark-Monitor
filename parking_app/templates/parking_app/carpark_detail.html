@@ -1,0 +1,57 @@
+{% extends 'parking_app/base_template.html' %} {% load static %} {% load humanize %}
+{% block content %}
+
+{% include 'parking_app/miniNavigation.html' %}
+
+<div class="container p-4">
+    <h3 class="font-weight-bold text-center mt-5 text-info">{{ carpark.name }}</h3>
+
+    <div class="table-responsive-sm">
+    <table class="table table-bordered mx-auto my-4">
+        <thead>
+        <tr>
+            <th>Carpark Name</th>
+            <th>Total Capacity</th>
+            <th>Available Slots</th>
+            <th>Charges</th>
+            <th>Operation Time</th>
+            <th>Owner</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ carpark.name|default_if_none:"Detail still missing" }}</td>
+            <td>{{ carpark.capacity|default_if_none:"Detail still missing" }}</td>
+            <td>{{ carpark.available_slots|default_if_none:"Detail still missing"  }}</td>
+            <td>Ksh. {{ carpark.price|default_if_none:"Detail still missing" }}</td>
+            <td>{{ carpark.get_operation_hours_display|default_if_none:"Detail still missing" }}</td>
+            <td>{{ carpark.get_proprietor_display|default_if_none:"Detail still missing" }}</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+
+
+    {% if user.is_staff %}
+        <h3 class="font-weight-bold text-center mb-2 mt-5 pt-5">Update Records for {{ carpark.name }}</h3>
+
+        {% if messages %}
+            <div class="my-2 p-2 alert-info">
+                {% for message in messages %}
+                    <p{% if message.tags %} class="text-{{ message.tags }} lead text-center"{% endif %}>{{ message|safe }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post">{% csrf_token %}
+            <div class="table-responsive-sm">
+                <table class="table table-bordered mx-auto my-4">
+                    {{ carpark_update_form.as_table }}
+                </table>
+            </div>
+            <button class="btn btn-info mb-5" type="submit">Update</button>
+        </form>
+    {% endif %}
+</div>
+
+{% endblock %}

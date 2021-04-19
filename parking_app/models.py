@@ -14,6 +14,7 @@ class SpecialAddress(models.Model):
 class Carpark(models.Model):
     capacity = models.PositiveIntegerField(blank=True, null=True,)
     price = models.PositiveIntegerField(blank=True, null=True,)
+    available_slots = models.PositiveIntegerField(blank=True, null=True,)
 
     PROPRIETOR = [
         ('public', 'GOVERNMENT OWNED'),

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib  import messages
 
 from django.contrib.gis.db.models import Q
@@ -17,6 +17,7 @@ from .forms import (
     ProprietorshipForm,
     WorkDistanceForm,
     SpecialAddressForm,
+    CarparkUpdateForm,
 )
 
 # Create your views here.
@@ -47,6 +48,22 @@ def homepage_view(request):
     return render(request, template_name, context)
 
 
+def carpark_detail_view(request, park_id):
+    template_name = 'parking_app/carpark_detail.html'
+
+    carpark = get_object_or_404(Carpark, id=park_id)
+    carpark_update_form = CarparkUpdateForm(request.POST or None, instance=carpark)
+    if carpark_update_form.is_valid():
+        carpark_update_form.save()
+        messages.success(request, f"Details for {carpark.name} updated successfully")
+
+    context = {
+        'page_name': 'Carpark Detail',
+        'carpark': carpark,
+        'carpark_update_form': carpark_update_form,
+    }
+
+    return render(request, template_name, context)
 
 
 def special_address_view(request):

@@ -1,6 +1,7 @@
 from django.contrib.gis import forms
 from .models import (
-    SpecialAddress
+    SpecialAddress,
+    Carpark,
 )
 
 class MinPriceRangeForm(forms.Form):
@@ -99,4 +100,11 @@ class SpecialAddressForm(forms.ModelForm):
     class Meta:
         model = SpecialAddress
         fields = '__all__'
+
+
+class CarparkUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Carpark
+        fields = ['name', 'capacity', 'available_slots', 'price', 'proprietor', 'operation_hours']
 
