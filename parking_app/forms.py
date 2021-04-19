@@ -1,4 +1,7 @@
 from django.contrib.gis import forms
+from .models import (
+    SpecialAddress
+)
 
 class MinPriceRangeForm(forms.Form):
     min_price = forms.IntegerField(
@@ -76,3 +79,24 @@ class WorkDistanceForm(forms.Form):
             }
         )
     )
+
+
+class SpecialAddressForm(forms.ModelForm):
+
+    work_address = forms.PointField(
+        required=False,
+        widget= forms.OSMWidget(
+        attrs={
+            'map_width': 600,
+            'map_height': 300,
+            'default_lat': -1.2921,
+            'default_lon': 36.8219,
+            'default_zoom': 12
+            }
+        )
+    )
+
+    class Meta:
+        model = SpecialAddress
+        fields = '__all__'
+

@@ -1,4 +1,12 @@
 {% extends 'parking_app/base_template.html' %} {% load static %} {% load humanize %}
+
+{% block doc_meta %}
+    <link rel="stylesheet" type="text/css" href="{% static 'parking_app/css/carparks_map.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'parking_app/css/parkingStyling.css' %}">
+{% endblock %}
+    
+    
+
 {% block content %}
 
 {% include 'parking_app/mainNavigation.html' %}
@@ -13,9 +21,9 @@
 
 <div class="bg-light shadow-sm rounded-sm px-3" style="min-height:90vh;">
     <div class="row h-100" style="">
-        <div class="col-sm-4 border border-info" style="">
+        <div class="col-sm-3 mx-auto my-1 border border-info" style="overflow-y:scroll;">
+            <p class="text-center text-info lead mt-0 mb-4 py-0">Prefered Parameters</p>
             <form method="get">
-                <p class="text-center text-info lead mt-0 mb-4 py-0">Prefered Parameters</p>
                 <div class="my-3">{{ min_price_form }}</div>
                 <div class="my-3">{{ max_price_form }}</div>
                 <div class="my-3">{{ operation_hours_form }}</div>
@@ -33,16 +41,22 @@
             </form>
         </div>
 
-        <div class="col-sm-8" style="">
-            <div id="carpark_map" class="mx-auto my-0"></div>
+        <div class="col ml-sm-2 my-1 border border-primary" style="">
             <p class="text-center text-info lead my-0 py-0">Nairobi CBD Car Park Monitor System</p>
-            <div id="carpark_popup" class="carpark_popup_popup">
+            <div id="carpark_map" class="mx-auto my-0"></div>
+            <div id="carpark_popup" class="carpark_popup">
                 <p id="carpark_popupcloser" class="carpark_popup_closer font-weight-bold"></p>
                 <div id="carpark_PopupContent"></div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    let carparks_geojson = '{{ carparks_geojson|safe }}'
+    let OpenStreetMap_Opacity  = 0.95
+</script>
+<script src="{% static 'parking_app/js/carparks_map.js' %}"></script>
 
 
 

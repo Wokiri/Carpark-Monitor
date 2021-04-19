@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib  import messages
 
 from .forms import (
-    UserSignupModelForm
+    UserSignupModelForm,
+    
 )
 
 
@@ -14,6 +15,12 @@ from .forms import (
 def user_signup_view(request):
     template_name = 'users/signup.html'
     signup_form = UserSignupModelForm(request.POST or None)
+    if signup_form.is_valid() and 'username' in request.POST and 'password' in request.POST:
+        new_user = User.objects.create_user(**signup_form.cleaned_data)
+        if new_user:
+            messages.success(request, f"Account for {new_user} successfully created")
+            return redirect('user:login_page')
+        
     
 
     context = {
@@ -22,6 +29,8 @@ def user_signup_view(request):
     }
 
     return render(request, template_name, context)
+
+
 
 
 @login_required

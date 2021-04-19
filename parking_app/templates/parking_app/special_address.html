@@ -1,0 +1,15 @@
+{% extends 'parking_app/base_template.html' %} {% load static %} {% load humanize %}
+{% block content %}
+
+{% include 'parking_app/miniNavigation.html' %}
+
+
+{% if user.is_authenticated %}
+    <p class="lead text-info px-3 py-1 m-0">Hi {{ user|capfirst }}, let's add some addresses for convenience sake...</p>
+{% endif %}
+
+{{ special_address_form.media }}
+{{ special_address_form }}
+
+
+{% endblock %}

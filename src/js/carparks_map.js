@@ -11,8 +11,6 @@ import TileLayer from "ol/layer/Tile";
 import XYZ from "ol/source/XYZ";
 import { ZoomSlider } from "ol/control";
 
-const carparks_geojson = require("./test.json");
-
 const carpark_div = document.getElementById("carpark_map");
 const carpark_popup = document.getElementById("carpark_popup");
 const carpark_PopupContent = document.getElementById("carpark_PopupContent");
@@ -76,8 +74,7 @@ const carparkPolygonStyle = feature => {
 const OpenStreetMapLayer = new TileLayer({
   title: "OpenStreetMap",
   type: "base",
-  opacity: 1.0,
-  //   opacity: OpenStreetMap_Opacity,
+  opacity: OpenStreetMap_Opacity,
 
   source: new XYZ({
     attributions: " ",
@@ -118,32 +115,11 @@ const carpark_map = new Map({
 const mapExtent = CarparkLayer.getSource().getExtent();
 carpark_map.getView().fit(mapExtent, carpark_map.getSize());
 
-// carpark_map.on("pointermove", e => {
-
-//   carpark_map.forEachFeatureAtPixel(e.pixel, f => {
-// 	console.log(f);
-
-//   });
-// });
-
-// const searchLayer = new SearchLayer({
-//   layer: carparks_geojson,
-//   colName: "name",
-//   zoom: 10,
-//   collapsed: true,
-//   map: carpark_map,
-// });
-
-// carpark_map.addControl(searchLayer);
-
-// console.log(mapExtent);
-// console.log(carpark_map);
 
 carpark_map.addControl(new ZoomSlider());
 
 // If region is selected get feature info, don't otherwise
 const populate_PopupContent = theFeature => {
-
   carpark_PopupContent.innerHTML = `
     <p class='text-center'>Name: <span class='text-primary lead'>${theFeature.name}</span></p>
     <p class='text-center'>Available Slots: <span class='text-primary lead'>${theFeature.available_slots}</span></p>
@@ -160,7 +136,6 @@ carpark_map.addInteraction(singleMapClick);
 
 let selected = null;
 carpark_map.on("singleclick", evt => {
-
   carpark_map.forEachFeatureAtPixel(evt.pixel, layer => {
     selected = layer;
   });
@@ -168,15 +143,13 @@ carpark_map.on("singleclick", evt => {
   if (selected) {
     let click_coords = evt.coordinate;
     theOverlay.setPosition(click_coords);
-	console.log(selected.values_);
-	populate_PopupContent(selected.values_);
+    console.log(selected.values_);
+    populate_PopupContent(selected.values_);
     selected = null;
-    
   } else {
     theOverlay.setPosition(undefined);
     carpark_popupcloser.blur();
   }
-  
 });
 
 sync(carpark_map);

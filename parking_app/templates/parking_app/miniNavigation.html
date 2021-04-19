@@ -3,9 +3,6 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    {% if user.is_authenticated %}
-      <p class="lead text-info px-3 py-1 m-0">Hi {{ user|capfirst }}, let's identify a suitable carpark...</p>
-    {% endif %}
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
