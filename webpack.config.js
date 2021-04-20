@@ -13,7 +13,7 @@ module.exports = {
     bootstrapStyling: "./src/js/bootstrapStyling.js",
     parkingStyling: "./src/js/parkingStyling.js",
     carparks_map: "./src/js/carparks_map.js",
-    testing_js: "./src/js/test.js",
+    // testing_js: "./src/js/test.js",
   },
   output: {
     publicPath: "",

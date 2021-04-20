@@ -9,7 +9,12 @@ import Overlay from "ol/Overlay";
 import sync from "ol-hashed";
 import TileLayer from "ol/layer/Tile";
 import XYZ from "ol/source/XYZ";
-import { ZoomSlider } from "ol/control";
+import OSM from "ol/source/OSM";
+import {
+  Attribution,
+  defaults as defaultControls,
+  ZoomSlider,
+} from "ol/control";
 
 const carparks_geojson = require("./test.json");
 
@@ -34,22 +39,38 @@ const carparkTextStyle = feature =>
   new Text({
     textAlign: "center",
     textBaseline: "middle",
-    font: `light 16px "Trebuchet MS", Helvetica, sans-serif`,
+    font: `18px "Trebuchet MS", Helvetica, sans-serif`,
     text: carparkTextLabel(feature),
     placement: "polygon",
     fill: new Fill({
-      color: "rgb(0, 0, 0)",
+      color: "rgb(0, 0, 102)",
     }),
   });
 
 const carparkPolygonStyle = feature => {
-  if (carparkAvailableSlots(feature) <= 10) {
+  if (
+    (carparkAvailableSlots(feature) <= 10) &
+    (carparkAvailableSlots(feature) >= 0)
+  ) {
     return new Style({
       fill: new Fill({
-        color: "rgb(255, 0, 191)",
+        color: "rgba(204, 0, 204, 0.60)",
       }),
       stroke: new Stroke({
-        color: "rgb(64, 51, 0)",
+        color: "rgb(102, 0, 102)",
+        width: 2,
+      }),
+      text: carparkTextStyle(feature),
+      updateWhileAnimating: true, // optional, for instant visual feedback
+      updateWhileInteracting: true, // optional, for instant visual feedback
+    });
+  } else if (carparkAvailableSlots(feature) === 0) {
+    return new Style({
+      fill: new Fill({
+        color: "rgba(204, 0, 0, 0.60)",
+      }),
+      stroke: new Stroke({
+        color: "rgb(102, 0, 0)",
         width: 2,
       }),
       text: carparkTextStyle(feature),
@@ -59,11 +80,10 @@ const carparkPolygonStyle = feature => {
   } else {
     return new Style({
       fill: new Fill({
-        color: "rgb(0, 230, 230)",
+        color: "rgba(0, 204, 204, 0.60)",
       }),
       stroke: new Stroke({
-        color: "rgb(0, 77, 77)",
-
+        color: "rgb(0, 102, 102)",
         width: 2,
       }),
       text: carparkTextStyle(feature),
@@ -73,17 +93,28 @@ const carparkPolygonStyle = feature => {
   }
 };
 
-const OpenStreetMapLayer = new TileLayer({
-  title: "OpenStreetMap",
-  type: "base",
-  opacity: 1.0,
-  //   opacity: OpenStreetMap_Opacity,
 
-  source: new XYZ({
-    attributions: " ",
-    url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+// basemap layer
+const OpenStreetMapLayer = new TileLayer({
+  opacity: 0.95,
+  type: "base",
+  title: "OpenStreetMap Base Map",
+  source: new OSM({
+    attributions: `<a href="https://www.openstreetmap.org/">OSM Basemap</a>`,
   }),
 });
+
+// const OpenStreetMapLayer = new TileLayer({
+//   title: "OpenStreetMap",
+//   type: "base",
+//   opacity: 1.0,
+//   //   opacity: OpenStreetMap_Opacity,
+
+//   source: new XYZ({
+//     attributions: " ",
+//     url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+//   }),
+// });
 
 // carpark layer
 const CarparkLayer = new VectorLayer({
@@ -105,7 +136,16 @@ carpark_popupcloser.onclick = () => {
   return false;
 };
 
+
+let expandedAttribution = new Attribution({
+  collapsible: false,
+});
+
 const carpark_map = new Map({
+  controls: defaultControls({ attribution: false }).extend([
+    expandedAttribution,
+    new ZoomSlider(),
+  ]),
   target: carpark_div,
   layers: [OpenStreetMapLayer, CarparkLayer],
   overlays: [theOverlay],
@@ -118,40 +158,28 @@ const carpark_map = new Map({
 const mapExtent = CarparkLayer.getSource().getExtent();
 carpark_map.getView().fit(mapExtent, carpark_map.getSize());
 
-// carpark_map.on("pointermove", e => {
 
-//   carpark_map.forEachFeatureAtPixel(e.pixel, f => {
-// 	console.log(f);
+let checkSize = () => {
+  let isLess600 = carpark_map.getSize()[0] < 600;
+  expandedAttribution.setCollapsible(isLess600);
+  expandedAttribution.setCollapsed(isLess600);
+};
+checkSize();
+window.addEventListener("resize", checkSize);
 
-//   });
-// });
 
-// const searchLayer = new SearchLayer({
-//   layer: carparks_geojson,
-//   colName: "name",
-//   zoom: 10,
-//   collapsed: true,
-//   map: carpark_map,
-// });
 
-// carpark_map.addControl(searchLayer);
 
-// console.log(mapExtent);
-// console.log(carpark_map);
-
-carpark_map.addControl(new ZoomSlider());
-
-// If region is selected get feature info, don't otherwise
 const populate_PopupContent = theFeature => {
-
   carpark_PopupContent.innerHTML = `
     <p class='text-center'>Name: <span class='text-primary lead'>${theFeature.name}</span></p>
     <p class='text-center'>Available Slots: <span class='text-primary lead'>${theFeature.available_slots}</span></p>
     <a class="btn btn-outline-info my-0" href='/carpark-detail/${theFeature.pk}'>Park Details</a>
+    <a class="btn btn-outline-primary my-0" href='/book-slot/${theFeature.pk}'>Book Slot</a>
     `;
 };
 
-// sampleAnnotations selection option
+// carpark selection option
 const singleMapClick = new Select({
   layers: [CarparkLayer],
 }); //By default, this is module:ol/events/condition~singleClick. Other defaults are exactly what I need
@@ -160,7 +188,7 @@ carpark_map.addInteraction(singleMapClick);
 
 let selected = null;
 carpark_map.on("singleclick", evt => {
-
+  // If region is selected get feature info, don't otherwise
   carpark_map.forEachFeatureAtPixel(evt.pixel, layer => {
     selected = layer;
   });
@@ -168,15 +196,31 @@ carpark_map.on("singleclick", evt => {
   if (selected) {
     let click_coords = evt.coordinate;
     theOverlay.setPosition(click_coords);
-	console.log(selected.values_);
-	populate_PopupContent(selected.values_);
+    console.log(selected.values_);
+    populate_PopupContent(selected.values_);
     selected = null;
-    
   } else {
     theOverlay.setPosition(undefined);
     carpark_popupcloser.blur();
   }
-  
+});
+
+let attributionComplete = false;
+carpark_map.on("rendercomplete", function (evt) {
+  if (!attributionComplete) {
+    let attribution = document.getElementsByClassName("ol-attribution")[0];
+    let attributionList = attribution.getElementsByTagName("ul")[0];
+    let firstLayerAttribution = attributionList.getElementsByTagName("li")[0];
+    let olAttribution = document.createElement("li");
+    olAttribution.innerHTML =
+      '<a href="https://openlayers.org/">OpenLayers Docs</a> &#x2503; ';
+    let qgisAttribution = document.createElement("li");
+    qgisAttribution.innerHTML =
+      '<a href="https://qgis.org/">QGIS</a> &#x2503; ';
+    attributionList.insertBefore(olAttribution, firstLayerAttribution);
+    attributionList.insertBefore(qgisAttribution, firstLayerAttribution);
+    attributionComplete = true;
+  }
 });
 
 sync(carpark_map);
