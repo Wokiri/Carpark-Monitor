@@ -40,9 +40,10 @@ def homepage_view(request):
             carpark.save()
 
 
+
     min_price_form = MinPriceRangeForm(request.GET or None)
-    if min_price_form.is_valid() and 'price' in request.GET:
-        min_price = min_price_form.cleaned_data['price']
+    if min_price_form.is_valid() and 'min_price' in request.GET:
+        min_price = min_price_form.cleaned_data['min_price']
         allCarParks = allCarParks.filter(price__gte=min_price)
         if allCarParks:
             carparks_count = allCarParks.count()
@@ -51,8 +52,8 @@ def homepage_view(request):
 
 
     max_price_form = MaxPriceRangeForm(request.GET or None)
-    if max_price_form.is_valid() and 'price' in request.GET:
-        max_price = max_price_form.cleaned_data['price']
+    if max_price_form.is_valid() and 'max_price' in request.GET:
+        max_price = max_price_form.cleaned_data['max_price']
         allCarParks = allCarParks.filter(price__lte=max_price)
         if allCarParks:
             carparks_count = allCarParks.count()
@@ -74,7 +75,10 @@ def homepage_view(request):
     proprietor_form = ProprietorshipForm(request.GET or None)
     if proprietor_form.is_valid() and 'proprietor' in request.GET:
         proprietor = proprietor_form.cleaned_data['proprietor']
-        allCarParks = allCarParks.filter(proprietor=proprietor)
+        if proprietor == None:
+            allCarParks = allCarParks
+        else:
+            allCarParks = allCarParks.filter(proprietor=proprietor)
         if allCarParks:
             carparks_count = allCarParks.count()
         else:
@@ -143,13 +147,21 @@ def carpark_detail_view(request, park_id):
     return render(request, template_name, context)
 
 
-def special_address_view(request):
+def create_update_special_address_view(request):
     template_name = 'parking_app/special_address.html'
     special_address_form = SpecialAddressForm(request.POST or None)
-    if special_address_form.is_valid() and 'user' in request.POST and 'address' in request.POST:
-        special_address_form.save()
-        messages.success(request, f"Home Address {special_address_form.cleaned_data['address']} successfully specified")
-        return redirect('parking_app:homepage_page')
+    if special_address_form.is_valid() and 'address' in request.POST: #and 'user' in request.POST 
+        work_address_data = special_address_form.cleaned_data
+        address, created = SpecialAddress.objects.update_or_create(
+            name = 'work_address',
+            defaults = work_address_data
+        )
+        if created:
+            messages.success(request, f"A new Work Address {special_address_form.cleaned_data['address']} successfully specified")
+            return redirect('parking_app:homepage_page')
+        else:
+            messages.success(request, f"Work Address {special_address_form.cleaned_data['address']} successfully updated")
+            return redirect('parking_app:homepage_page')
     
 
     context = {
@@ -167,6 +179,15 @@ def book_slot_view(request, park_id):
     booking_message = f'<h3 class="text-center mt-5 text-info lead">You are about to book a slot in <span class="font-weight-bold">{carpark.name}</span></h3>'
     
     
+    if 'book' in request.POST:
+        if carpark.available_slots >= 1:
+            carpark.available_slots -= 1
+            carpark.save()
+            messages.success(request, f"{carpark.name} successfully booked!")
+            return redirect('parking_app:homepage_page')
+        else:
+            messages.error(request, f"{carpark.name} isn't available for booking at the moment!")
+            return redirect('parking_app:homepage_page')
 
     context = {
         'page_name': 'Book Slot',

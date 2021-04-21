@@ -6,7 +6,7 @@ from .models import (
 
 class MinPriceRangeForm(forms.Form):
     min_price = forms.IntegerField(
-        label='Minimum Price',
+        label='Minimum Price of',
         min_value=0,
         max_value =2000,
         widget=forms.NumberInput(
@@ -19,7 +19,7 @@ class MinPriceRangeForm(forms.Form):
 
 class MaxPriceRangeForm(forms.Form):
     max_price = forms.IntegerField(
-        label='Maximum Price',
+        label='Maximum Price of',
         min_value=0,
         max_value =2000,
         widget=forms.NumberInput(
