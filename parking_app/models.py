@@ -1,18 +1,12 @@
 from django.contrib.gis.db import models
-from django.conf import settings
 
 class SpecialAddress(models.Model):
-    ADDRESS = [
-        ('home_address', 'HOME ADDRESS'),
-        ('work_address', 'WORK ADDRESS'),
-    ]
-    name = models.CharField(max_length=20, choices=ADDRESS)
-    # user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length=20,)
     address = models.PointField(srid=4326)
 
     class Meta:
-        verbose_name = 'special address'
-        verbose_name_plural = 'special addresses'
+        verbose_name = 'work place address'
+        verbose_name_plural = 'work place addresses'
 
     def __str__(self):
         return self.name

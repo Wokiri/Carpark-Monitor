@@ -86,11 +86,11 @@ def homepage_view(request):
     
 
     work_distance_form = ''
-    work_address_geojson = ''
-    if SpecialAddress.objects.get(name='work_address'):
-        work_address_geometry = SpecialAddress.objects.get(name='work_address').address
+    work_address_geojson = '{"type": "Point","coordinates": [36.818334460258484, -1.287148200335868]}'
+    if SpecialAddress.objects.filter(id=1):
+        work_address_geometry = SpecialAddress.objects.get(id=1).address
         work_address_geojson = serialize(
-            'geojson', SpecialAddress.objects.filter(name='work_address')
+            'geojson', SpecialAddress.objects.filter(id=1)
         )
         parks_fitting_work_dist = []
         work_distance_form = WorkDistanceForm(request.GET or None)
@@ -153,14 +153,14 @@ def create_update_special_address_view(request):
     if special_address_form.is_valid() and 'address' in request.POST: #and 'user' in request.POST 
         work_address_data = special_address_form.cleaned_data
         address, created = SpecialAddress.objects.update_or_create(
-            name = 'work_address',
+            id = 1,
             defaults = work_address_data
         )
         if created:
-            messages.success(request, f"A new Work Address {special_address_form.cleaned_data['address']} successfully specified")
+            messages.success(request, f"A new Work Address {special_address_form.cleaned_data['address']} created")
             return redirect('parking_app:homepage_page')
         else:
-            messages.success(request, f"Work Address {special_address_form.cleaned_data['address']} successfully updated")
+            messages.success(request, f"Work Address {special_address_form.cleaned_data['address']} updated")
             return redirect('parking_app:homepage_page')
     
 

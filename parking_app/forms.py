@@ -46,6 +46,7 @@ class ProprietorshipForm(forms.ModelForm):
 class WorkDistanceForm(forms.Form):
     work_distance = forms.IntegerField(
         label='Distance in meters from Work Place Address',
+        help_text='Unless you specify your work location, this distance will be evaluated with respect to Nyayo House',
         widget=forms.NumberInput(
             attrs={
                 'class':'form-control mr-sm-1',
