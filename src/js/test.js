@@ -1,7 +1,7 @@
 import "ol/ol.css";
 import GeoJSON from "ol/format/GeoJSON";
 import VectorSource from "ol/source/Vector";
-import { Style, Fill, Text, Stroke } from "ol/style";
+import { Circle as CircleStyle, Style, Fill, Text, Stroke } from "ol/style";
 import VectorLayer from "ol/layer/Vector";
 import { Map, View } from "ol";
 import Select from "ol/interaction/Select";
@@ -18,6 +18,7 @@ import {
 
 const carparks_geojson = require("./test.json");
 
+
 const carpark_div = document.getElementById("carpark_map");
 const carpark_popup = document.getElementById("carpark_popup");
 const carpark_PopupContent = document.getElementById("carpark_PopupContent");
@@ -29,6 +30,48 @@ const CarparkVector = new VectorSource({
     featureProjection: "EPSG:3857",
     extractGeometryName: true,
   }),
+});
+
+
+
+const work_address_geojson = {
+  type: "FeatureCollection",
+  crs: { type: "name", properties: { name: "EPSG:4326" } },
+  features: [
+    {
+      type: "Feature",
+      properties: { name: "work_address", user: 1, pk: "1" },
+      geometry: {
+        type: "Point",
+        coordinates: [36.818334460258484, -1.287148200335868],
+      },
+    },
+  ],
+};
+const WorkAdressVector = new VectorSource({
+  features: new GeoJSON().readFeatures(work_address_geojson, {
+    dataProjection: "EPSG:4326",
+    featureProjection: "EPSG:3857",
+    extractGeometryName: true,
+  }),
+});
+
+const WorkAdressTextLabel = feature => `${feature.get("name")}`;
+
+const WorkAdressPointStyle = feature => {
+  return new Style({
+    image: new CircleStyle({
+      radius: 10,
+      fill: new Fill({ color: "rgb(102, 0, 102)" }),
+      stroke: new Stroke({ color: "rgb(255, 255, 255)", width: 4 }),
+    }),
+  });
+};
+
+// workplace layer
+const WorkAdressLayer = new VectorLayer({
+  source: WorkAdressVector,
+  style: WorkAdressPointStyle,
 });
 
 // carpark visual style
@@ -141,13 +184,14 @@ let expandedAttribution = new Attribution({
   collapsible: false,
 });
 
+
 const carpark_map = new Map({
   controls: defaultControls({ attribution: false }).extend([
     expandedAttribution,
     new ZoomSlider(),
   ]),
   target: carpark_div,
-  layers: [OpenStreetMapLayer, CarparkLayer],
+  layers: [OpenStreetMapLayer, CarparkLayer, WorkAdressLayer],
   overlays: [theOverlay],
   view: new View({
     maxZoom: 28,

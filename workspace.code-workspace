@@ -8,6 +8,12 @@
     "python.pythonPath": "d:\\Dev\\venv386\\Scripts\\python.exe",
     "emmet.excludeLanguages": [
       "markdown"
-    ]
+    ],
+    "emmet.preferences": {
+    
+    },
+    "emmet.showSuggestionsAsSnippets": true,
+    "emmet.showAbbreviationSuggestions": false,
+    "emmet.triggerExpansionOnTab": true
   }
 }

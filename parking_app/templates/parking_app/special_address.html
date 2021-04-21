@@ -1,15 +1,26 @@
-{% extends 'parking_app/base_template.html' %} {% load static %} {% load humanize %}
+{% extends 'parking_app/base_template.html' %} {% load static %} {% load
+humanize %} {% block doc_meta %} {{ special_address_form.media }} {% endblock %}
 {% block content %}
 
-{% include 'parking_app/miniNavigation.html' %}
-
+<div class="container">{% include 'parking_app/miniNavigation.html' %}</div>
 
 {% if user.is_authenticated %}
-    <p class="lead text-info px-3 py-1 m-0">Hi {{ user|capfirst }}, let's add some addresses for convenience sake...</p>
-{% endif %}
-
-{{ special_address_form.media }}
-{{ special_address_form }}
-
-
-{% endblock %}
+<div class="d-flex justify-content-center">
+  <p class="text-center text-info lead p-4">
+    Hi {{ user|capfirst }}, let's add some addresses for convenience sake...
+  </p>
+</div>
+<div class="d-flex justify-content-center">
+  <form method="post">
+    {% csrf_token %}
+    <div class="table-responsive-sm">
+      <table class="mx-auto">
+        {{ special_address_form.as_table }}
+      </table>
+    </div>
+    <button class="btn btn-info mb-5" type="submit">Create Address</button>
+  </form>
+  {% else %}
+  <p class="text-center text-warning lead">Login/signup to access feature...</p>
+</div>
+{% endif %} {% endblock %}

@@ -1,7 +1,7 @@
 import "ol/ol.css";
 import GeoJSON from "ol/format/GeoJSON";
 import VectorSource from "ol/source/Vector";
-import { Style, Fill, Text, Stroke } from "ol/style";
+import { Circle as CircleStyle, Style, Fill, Text, Stroke } from "ol/style";
 import VectorLayer from "ol/layer/Vector";
 import { Map, View } from "ol";
 import Select from "ol/interaction/Select";
@@ -28,6 +28,38 @@ const CarparkVector = new VectorSource({
     extractGeometryName: true,
   }),
 });
+
+
+const WorkAdressPointStyle = feature => {
+  return new Style({
+    image: new CircleStyle({
+      radius: 10,
+      fill: new Fill({ color: "rgb(102, 0, 102)" }),
+      stroke: new Stroke({ color: "rgb(255, 255, 255)", width: 4 }),
+    }),
+  });
+};
+
+
+const WorkAdressVector = new VectorSource({
+  features: new GeoJSON().readFeatures(work_address_geojson, {
+    dataProjection: "EPSG:4326",
+    featureProjection: "EPSG:3857",
+    extractGeometryName: true,
+  }),
+});
+
+
+
+// workplace layer
+const WorkAdressLayer = new VectorLayer({
+  source: WorkAdressVector,
+  style: WorkAdressPointStyle,
+});
+
+
+
+
 
 // carpark visual style
 const carparkTextLabel = feature => `${feature.get("name")}`;
@@ -143,7 +175,7 @@ const carpark_map = new Map({
     new ZoomSlider(),
   ]),
   target: carpark_div,
-  layers: [OpenStreetMapLayer, CarparkLayer],
+  layers: [OpenStreetMapLayer, CarparkLayer, WorkAdressLayer],
   overlays: [theOverlay],
   view: new View({
     maxZoom: 28,

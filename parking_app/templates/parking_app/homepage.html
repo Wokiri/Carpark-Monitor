@@ -21,6 +21,9 @@
 
 <div class="bg-light shadow-sm rounded-sm px-3" style="min-height:90vh;">
     <div class="row h-100" style="">
+    <div class='col-12 alert-info'>
+        <p class="text-center text-info font-weight-bolder pt-2">{{ carparks_count|apnumber|capfirst }} Carpark{{ carparks_count|pluralize }} Found...</p>
+    </div>
         <div class="col-sm-3 mx-auto my-1 border border-info" style="overflow-y:scroll;">
             <p class="text-center text-info lead mt-0 mb-4 py-0">Prefered Parameters</p>
             <form method="get">
@@ -54,6 +57,7 @@
 
 <script>
     let carparks_geojson = '{{ carparks_geojson|safe }}'
+    let work_address_geojson = '{{ work_address_geojson|safe }}'
     let OpenStreetMap_Opacity  = 0.95
 </script>
 <script src="{% static 'parking_app/js/carparks_map.js' %}"></script>

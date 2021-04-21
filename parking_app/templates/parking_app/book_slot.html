@@ -1,0 +1,18 @@
+{% extends 'parking_app/base_template.html' %} {% load static %} {% load
+humanize %} {% block content %}
+
+<div class="container p-4">
+  {% include 'parking_app/miniNavigation.html' %}
+  <div class="w-75 mx-auto">
+    <div class="mx-auto">{{ booking_message|safe }}</div>
+    <div class="container d-flex justify-content-center my-4">
+      <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-info" type="submit">Book</button>
+        <a class="btn btn-outline-dark" href="../../"> Back to Map </a>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

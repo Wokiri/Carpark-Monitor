@@ -10,26 +10,34 @@ class SpecialAddress(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     address = models.PointField(srid=4326)
 
+    class Meta:
+        verbose_name = 'special address'
+        verbose_name_plural = 'special addresses'
+
+    def __str__(self):
+        return self.name
+
 
 class Carpark(models.Model):
-    capacity = models.PositiveIntegerField(blank=True, null=True,)
-    price = models.PositiveIntegerField(blank=True, null=True,)
-    available_slots = models.PositiveIntegerField(blank=True, null=True,)
+    capacity = models.PositiveIntegerField(default=100)
+    price = models.PositiveIntegerField(default=2000)
+    available_slots = models.PositiveIntegerField(default=100)
 
     PROPRIETOR = [
         ('public', 'GOVERNMENT OWNED'),
         ('private', 'PRIVATE OWNED'),
     ]
-    proprietor = models.CharField(max_length=10, blank=True, null=True, choices=PROPRIETOR)
+    proprietor = models.CharField(max_length=10, default='private', choices=PROPRIETOR)
 
     OPERATION_HOURS = [
         ('full_time', 'FULL TIME (24 HOURS)'),
         ('part_time_day', 'DAY HOURS'),
         ('part_time_night', 'NIGHT HOURS'),
     ]
-    operation_hours = models.CharField(max_length=20, blank=True, null=True, choices=OPERATION_HOURS)
+    operation_hours = models.CharField(max_length=20, default='full_time', choices=OPERATION_HOURS)
 
     name = models.CharField(max_length=50)
     geom = models.PolygonField(srid=4326)
+    carpark_centroid = models.PointField(blank=True, null=True, srid=4326)
 
     def __str__(self): return self.name
